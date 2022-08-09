@@ -1,6 +1,7 @@
 const express = require('express');
 // import ApolloServer
 const { ApolloServer } = require('apollo-server-express');
+// need to import auth 
 
 // import our typeDefs and resolvers
 const { typeDefs, resolvers } = require('./schemas');
@@ -11,18 +12,21 @@ const PORT = process.env.PORT || 3001;
 const server = new ApolloServer({
   typeDefs,
   resolvers
+  // context
 });
 
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+// need Path?
 
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async (typeDefs, resolvers) => {
 await server.start();
 // integrate our Apollo server with the Express application as middleware
 server.applyMiddleware({ app });
+
 
 db.once('open', () => {
     app.listen(PORT, () => {
