@@ -5,18 +5,17 @@ const typeDefs = gql`
     _id: ID
     username: String
     email: String
-    friendCount: Int
-    thoughts: [Thought]
-    friends: [User]
+    bookCount: Int
+    savedBooks: [Book]
   }
 
   type Book {
-    _id: ID
-    thoughtText: String
-    createdAt: String
-    username: String
-    reactionCount: Int
-    reactions: [Reaction]
+    bookId: String!
+    authors: [String]
+    title: String!
+    description: String
+    image: String
+    link: String
   }
 
   type Auth {
@@ -24,21 +23,28 @@ const typeDefs = gql`
     user: User
   }
 
+  
   type Query {
     me: User
-    users: [User]
     
   }
 
   type Mutation {
+    saveBook()
+    removeBook()
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
     
   }
-
+  
+  input InputBook {
+    bookId: String
+    authors: [String]
+    title: String!
+    description: String!
+    image: String
+    link: String
+  }
 `; 
-
-// need to add saved books and remove books mutations here, need to update book model
-// user model also
 
 module.exports = typeDefs;
