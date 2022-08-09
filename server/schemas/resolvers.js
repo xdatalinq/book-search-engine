@@ -16,10 +16,36 @@ const resolvers = {
       throw new AuthenticationError("Not logged in");
     },
     users: async () => {
-      return User.find().select("-__v -password");
+      return User.find().select("-__v -password").populate("savedBooks");
     },
 
     Mutation: {
+      saveBook: async (parent, { input }, { user }) => {
+        if (user) {
+          const updatedUser = await User.findByIdAndUpdate(
+            { _id: user._id },
+            { $addToSet: { savedBooks: input } },
+            { new: true }
+          );
+
+          return updatedUser;
+        }
+
+        throw new AuthenticationError("You need to be logged in!");
+      },
+      removeBook: async (parent, { bookId }, { user }) => {
+        if (user) {
+          const updatedUser = await User.findOneAndUpdate(
+            { _id: user._id },
+            { $pull: { savedBooks: { bookId: bookId } } },
+            { new: true }
+          );
+
+          return updatedUser;
+        }
+
+        throw new AuthenticationError("You have to be logged in!");
+      },
       addUser: async (parent, args) => {
         const user = await User.create(args);
         const token = signToken(user);
@@ -42,8 +68,6 @@ const resolvers = {
         const token = signToken(user);
         return { token, user };
       },
-
-      //  Need to be be able to add a book and remove a book, these will be mutations.
     },
   },
 };
