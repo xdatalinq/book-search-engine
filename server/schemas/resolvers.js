@@ -8,23 +8,21 @@ const resolvers = {
       if (context.user) {
         const userData = await User.findOne({ _id: context.user._id })
           .select("-__v -password")
-          .populate("savedBooks");
 
         return userData;
       }
 
       throw new AuthenticationError("Not logged in");
     },
-    users: async () => {
-      return User.find().select("-__v -password").populate("savedBooks");
+
     },
 
     Mutation: {
-      saveBook: async (parent, { input }, { user }) => {
+      saveBook: async (parent, { bookData }, { user }) => {
         if (user) {
           const updatedUser = await User.findByIdAndUpdate(
             { _id: user._id },
-            { $addToSet: { savedBooks: input } },
+            { $addToSet: { savedBooks: bookData } },
             { new: true }
           );
 
@@ -67,7 +65,7 @@ const resolvers = {
 
         const token = signToken(user);
         return { token, user };
-      },
+      
     },
   },
 };
