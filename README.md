@@ -30,7 +30,7 @@
   ![image](https://user-images.githubusercontent.com/89672040/183815189-1a5bf95d-9de4-4ba5-b9c8-3c841581e934.png)
   
   ## Live
-  New Heroku link coming soon!
+  Live: https://secure-escarpment-70520-e0c51f2b1e98.herokuapp.com
   
   ## Repository
   Repo: https://github.com/xdatalinq/book-search-engine
